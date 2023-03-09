@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import ContactForm from '../components/Form/Form';
 import Filter from '../components/FilterContacts/Filter';
 import CreatContactList from './ContactList/CreatContactList';
+import { Section } from './App.styled';
 
 export class App extends React.Component {
   state = {
@@ -15,34 +16,21 @@ export class App extends React.Component {
     filter: '',
   };
 
-  formState = data => {};
-
-  handleInput = event => {
-    this.setState({ [event.currentTarget.name]: event.currentTarget.value });
-  };
-
-  hendleSubmit = event => {
-    event.preventDefault();
-
+  hendleSubmit = (values, { resetForm }) => {
+    console.log(values);
     const contact = {
       id: nanoid(),
-      name: event.currentTarget.name.value,
-      number: event.currentTarget.number.value,
+      ...values,
     };
     const isAdded = this.checkContactIsAdded(contact);
 
     if (isAdded) {
-      return (
-        alert(`${contact.name} is already in contacts`),
-        (event.currentTarget.name.value = ''),
-        (event.currentTarget.number.value = '')
-      );
+      return alert(`${contact.name} is already in contacts`);
     } else {
       this.setState(prevState => {
         return { contacts: [contact, ...prevState.contacts] };
       });
-      event.currentTarget.name.value = '';
-      event.currentTarget.number.value = '';
+      resetForm();
     }
   };
 
@@ -71,21 +59,17 @@ export class App extends React.Component {
       fil.name.toLowerCase().includes(normolizeFilter)
     );
     return (
-      <section>
-        <ContactForm
-          onSubmit={this.formState}
-          hendleSubmit={this.hendleSubmit}
-          handleInput={this.handleInput}
-        />
+      <Section>
+        <ContactForm hendleSubmit={this.hendleSubmit} />
 
         <h2>Contacts</h2>
         <h2>Find Contacts by name</h2>
-        <Filter changeFilter={this.changeFilter} />
+        <Filter changeFilter={this.changeFilter} value={this.state.filter} />
         <CreatContactList
           array={filterList}
           deletContacte={this.deletContacte}
         />
-      </section>
+      </Section>
     );
   }
 }

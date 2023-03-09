@@ -1,14 +1,21 @@
+import PropTypes from 'prop-types';
+import { LiList, ButtonContacts, UlContacts } from './ContactList.styled';
 export default function CreatContactList({ array, deletContacte }) {
   return (
-    <ul>
+    <UlContacts>
       {array.map(arr => (
-        <li key={arr.id}>
+        <LiList key={arr.id}>
           {arr.name}:{arr.number}
-          <button type="button" onClick={() => deletContacte(arr.id)}>
+          <ButtonContacts type="button" onClick={() => deletContacte(arr.id)}>
             Delet
-          </button>
-        </li>
+          </ButtonContacts>
+        </LiList>
       ))}
-    </ul>
+    </UlContacts>
   );
 }
+
+CreatContactList.prototype = {
+  array: PropTypes.array.isRequired,
+  deletContacte: PropTypes.func.isRequired,
+};
