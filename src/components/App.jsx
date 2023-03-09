@@ -25,6 +25,7 @@ export class App extends React.Component {
     const isAdded = this.checkContactIsAdded(contact);
 
     if (isAdded) {
+      resetForm();
       return alert(`${contact.name} is already in contacts`);
     } else {
       this.setState(prevState => {
